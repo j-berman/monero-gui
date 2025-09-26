@@ -5,16 +5,25 @@ ARG QT_VERSION=v5.15.17-lts-lgpl
 ENV SOURCE_DATE_EPOCH=1397818193
 
 RUN apt update && \
-    DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 gettext git libtool pkg-config \
+    DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 mingw-w64 gettext git libtool pkg-config \
     python && \
     rm -rf /var/lib/apt/lists/*
+
+RUN curl -O https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
+    echo "6aeece6993e902708983b209d04c0d1dbb14ebb405ddb87def578d41f920f56d rustup-init" | sha256sum -c && \
+    chmod +x rustup-init && \
+    ./rustup-init -y --default-toolchain 1.69
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rustup target add x86_64-pc-windows-gnu
 
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
 
-RUN git clone -b v0.18.4.3 --depth 1 https://github.com/monero-project/monero && \
+RUN git clone -b fcmp++-alpha-stressnet --depth 1 https://github.com/seraphis-migration/monero && \
     cd monero && \
-    git reset --hard 7c6e84466a90f6701ebe09ff8f61ea8af3883181 && \
+    git reset --hard feac605d24009152dfa3499a6e2789c0cdf94bfb && \
     cp -a contrib/depends / && \
     cd .. && \
     rm -rf monero

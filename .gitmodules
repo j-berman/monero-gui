@@ -1,6 +1,7 @@
 [submodule "monero"]
 	path = monero
-	url = https://github.com/monero-project/monero
+	url = https://github.com/seraphis-migration/monero
+	branch = fcmp++-alpha-stressnet
 	ignore = all
 [submodule "external/quirc"]
 	path = external/quirc
