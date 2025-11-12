@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 ARG THREADS=1
 ARG QT_VERSION=v5.15.17-lts-lgpl
@@ -10,9 +10,20 @@ ENV SOURCE_DATE_EPOCH=1397818193
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && \
-    apt install -y automake autopoint bison build-essential gettext git gperf libgl1-mesa-dev libx11-dev libx11-xcb-dev libglib2.0-dev \
+    apt install -y automake autopoint bison build-essential gettext git gperf libgl1-mesa-dev libglib2.0-dev \
     libpng-dev libpthread-stubs0-dev libsodium-dev libtool-bin libudev-dev libusb-1.0-0-dev mesa-common-dev \
     pkg-config python wget xutils-dev
+
+RUN apt update && \
+    apt install -y software-properties-common && \
+    add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
+    apt update && \
+    apt install -y g++-9 && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 90
+
+RUN g++ --version
 
 RUN git clone -b xorgproto-2020.1 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xorgproto && \
     cd xorgproto && \
