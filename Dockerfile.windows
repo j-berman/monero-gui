@@ -5,9 +5,12 @@ ARG QT_VERSION=v5.15.17-lts-lgpl
 ENV SOURCE_DATE_EPOCH=1397818193
 
 RUN apt update && \
-    DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 mingw-w64-x86_64-rust gettext git libtool pkg-config \
+    DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 gettext git libtool pkg-config \
     python && \
     rm -rf /var/lib/apt/lists/*
+
+RUN rustup target add x86_64-pc-windows-gnu && \
+    apt install mingw-w64
 
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
