@@ -9,7 +9,11 @@ RUN apt update && \
     python && \
     rm -rf /var/lib/apt/lists/*
 
-RUN rustup target add x86_64-pc-windows-gnu && \
+RUN curl -O https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
+    echo "6aeece6993e902708983b209d04c0d1dbb14ebb405ddb87def578d41f920f56d rustup-init" | sha256sum -c && \
+    chmod +x rustup-init && \
+    ./rustup-init -y --default-toolchain 1.69 && \
+    rustup target add x86_64-pc-windows-gnu && \
     apt install mingw-w64
 
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
