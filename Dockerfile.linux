@@ -18,10 +18,11 @@ RUN apt update && \
     apt install -y software-properties-common && \
     add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     apt update && \
-    apt install -y g++-9 && \
+    apt install -y g++-9 gcc-9 libstdc++6 && \
     rm -rf /var/lib/apt/lists/*
 
-RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 90
+RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 90 && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90
 
 RUN wget https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
     echo "6aeece6993e902708983b209d04c0d1dbb14ebb405ddb87def578d41f920f56d rustup-init" | sha256sum -c && \
