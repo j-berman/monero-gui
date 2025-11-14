@@ -1,7 +1,7 @@
 [submodule "monero"]
 	path = monero
-	url = https://github.com/seraphis-migration/monero
-	branch = fcmp++-alpha-stressnet
+	url = https://github.com/jeffro256/monero
+	branch = revert_commaprefix_usage_fcmp++-alpha
 	ignore = all
 [submodule "external/quirc"]
 	path = external/quirc
