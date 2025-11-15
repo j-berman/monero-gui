@@ -23,7 +23,7 @@ RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-
 
 RUN git clone -b revert_commaprefix_usage_fcmp++-alpha --depth 1 https://github.com/jeffro256/monero && \
     cd monero && \
-    git reset --hard 3c1c6aaa01184ec1f0dbe5bd098df54bf3f61c11 && \
+    git reset --hard f3cbd90c47e8073954238a40f186318d1799dc10 && \
     cp -a contrib/depends / && \
     cd .. && \
     rm -rf monero
