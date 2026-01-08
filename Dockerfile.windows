@@ -23,7 +23,7 @@ RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-
 
 RUN git clone -b fcmp++-alpha-stressnet --depth 1 https://github.com/seraphis-migration/monero && \
     cd monero && \
-    git reset --hard feac605d24009152dfa3499a6e2789c0cdf94bfb && \
+    git reset --hard 0980ff601c8f2093e8037711551dd6a49ad6c11f && \
     cp -a contrib/depends / && \
     cd .. && \
     rm -rf monero
