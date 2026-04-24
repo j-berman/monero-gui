@@ -7,11 +7,29 @@ ENV CFLAGS="-fPIC"
 ENV CPPFLAGS="-fPIC"
 ENV CXXFLAGS="-fPIC"
 ENV SOURCE_DATE_EPOCH=1397818193
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && \
-    apt install -y automake autopoint bison gettext git gperf libgl1-mesa-dev libglib2.0-dev \
+    apt install -y automake autopoint bison build-essential gettext git gperf libgl1-mesa-dev libglib2.0-dev \
     libpng-dev libpthread-stubs0-dev libsodium-dev libtool-bin libudev-dev libusb-1.0-0-dev mesa-common-dev \
     pkg-config python wget xutils-dev
+
+RUN apt update && \
+    apt install -y software-properties-common && \
+    add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
+    apt update && \
+    apt install -y g++-9 gcc-9 libstdc++6 && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 90 && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90
+
+RUN wget https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
+    echo "6aeece6993e902708983b209d04c0d1dbb14ebb405ddb87def578d41f920f56d rustup-init" | sha256sum -c && \
+    chmod +x rustup-init && \
+    ./rustup-init -y --default-toolchain 1.93
+
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN git clone -b xorgproto-2020.1 --depth 1 https://gitlab.freedesktop.org/xorg/proto/xorgproto && \
     cd xorgproto && \
@@ -185,9 +203,9 @@ RUN wget https://www.nlnetlabs.nl/downloads/unbound/unbound-1.16.2.tar.gz && \
     make -j$THREADS install && \
     rm -rf $(pwd)
 
-RUN rm /usr/lib/x86_64-linux-gnu/libX11.a && \
-    rm /usr/lib/x86_64-linux-gnu/libXext.a && \
-    rm /usr/lib/x86_64-linux-gnu/libX11-xcb.a && \
+RUN rm -f /usr/lib/x86_64-linux-gnu/libX11.a && \
+    rm -f /usr/lib/x86_64-linux-gnu/libXext.a && \
+    rm -f /usr/lib/x86_64-linux-gnu/libX11-xcb.a && \
     git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     cd qt5 && \
     git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1 && \
