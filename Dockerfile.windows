@@ -33,6 +33,7 @@ RUN apt update && \
     libgssapi-krb5-2 \
     libtool \
     libxkbcommon0 \
+    mingw-w64 \
     ninja-build \
     perl \
     pkg-config \
@@ -41,12 +42,21 @@ RUN apt update && \
     xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
+RUN curl -O https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
+    echo "6aeece6993e902708983b209d04c0d1dbb14ebb405ddb87def578d41f920f56d rustup-init" | sha256sum -c && \
+    chmod +x rustup-init && \
+    ./rustup-init -y --default-toolchain 1.93
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rustup target add x86_64-pc-windows-gnu
+
 RUN update-alternatives --set x86_64-w64-mingw32-g++ "$(which x86_64-w64-mingw32-g++-posix)" && \
     update-alternatives --set x86_64-w64-mingw32-gcc "$(which x86_64-w64-mingw32-gcc-posix)"
 
-RUN git clone -b v0.18.5.4 --depth 1 https://github.com/monero-project/monero && \
+RUN git clone -b fcmp++-beta-stressnet --depth 1 https://github.com/seraphis-migration/monero && \
     cd monero && \
-    git reset --hard 85f036ba7019cd36f08e8a38a27c37ea7b522618 && \
+    git reset --hard f00ab809cfbf38fecc7f380642713968b843cba7 && \
     cp -a contrib/depends / && \
     cd .. && \
     rm -rf monero
