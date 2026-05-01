@@ -4,7 +4,7 @@ ARG THREADS=1
 ARG QT_VERSION=v5.15.18-lts-lgpl
 ENV SOURCE_DATE_EPOCH=1397818193
 
-RUN sudo ln -s /usr/bin/python3 /usr/bin/python && python --version
+RUN ln -s /usr/bin/python3 /usr/bin/python && python --version
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 mingw-w64 gettext git libtool pkg-config && \
