@@ -6,10 +6,8 @@ ENV SOURCE_DATE_EPOCH=1397818193
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 mingw-w64 gettext git libtool pkg-config \
-    python-is-python3 && \
+    directx-shader-compiler python-is-python3 && \
     rm -rf /var/lib/apt/lists/*
-
-RUN python --version
 
 RUN curl -O https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
     echo "6aeece6993e902708983b209d04c0d1dbb14ebb405ddb87def578d41f920f56d rustup-init" | sha256sum -c && \
