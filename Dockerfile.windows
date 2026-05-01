@@ -6,7 +6,7 @@ ENV SOURCE_DATE_EPOCH=1397818193
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 mingw-w64 gettext git libtool pkg-config \
-    directx-shader-compiler python-is-python3 && \
+    python-is-python3 && \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl -O https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
@@ -47,7 +47,7 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     ./configure --prefix=/depends/x86_64-w64-mingw32 -xplatform win32-g++ \
     -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- \
     -I $(pwd)/qtbase/src/3rdparty/angle/include \
-    -opensource -confirm-license -release -static -static-runtime -opengl dynamic -no-angle \
+    -opensource -confirm-license -release -static -static-runtime -opengl dynamic -no-direct3d -no-angle \
     -no-avx -no-openssl -no-sql-sqlite \
     -no-feature-qml-worker-script -no-openssl -no-sql-sqlite \
     -qt-freetype -qt-harfbuzz -qt-libjpeg -qt-libpng -qt-pcre -qt-zlib \
