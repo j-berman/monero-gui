@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:20.04
 
 ARG THREADS=1
 ARG QT_VERSION=v5.15.18-lts-lgpl
@@ -6,7 +6,7 @@ ENV SOURCE_DATE_EPOCH=1397818193
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 mingw-w64 gettext git libtool pkg-config \
-    python-is-python3 && \
+    python && \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl -O https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
@@ -23,7 +23,6 @@ RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-
 
 RUN git clone -b fcmp++-beta-stressnet --depth 1 https://github.com/seraphis-migration/monero && \
     cd monero && \
-    git fetch origin a6737c15afd734dc27fb043d196abd7608a3dd63 && \
     git reset --hard a6737c15afd734dc27fb043d196abd7608a3dd63 && \
     cp -a contrib/depends / && \
     cd .. && \
@@ -34,6 +33,7 @@ RUN make -j$THREADS -C /depends HOST=x86_64-w64-mingw32 NO_QT=1
 RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     cd qt5 && \
     git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1 && \
+    git clone git://code.qt.io/qt/qtdeclarative.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtgraphicaleffects.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtimageformats.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtmultimedia.git -b ${QT_VERSION} --depth 1 && \
@@ -48,7 +48,7 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     -I $(pwd)/qtbase/src/3rdparty/angle/include \
     -opensource -confirm-license -release -static -static-runtime -opengl dynamic -no-angle \
     -no-avx -no-openssl -no-sql-sqlite \
-    -no-openssl -no-sql-sqlite \
+    -no-feature-qml-worker-script -no-openssl -no-sql-sqlite \
     -qt-freetype -qt-harfbuzz -qt-libjpeg -qt-libpng -qt-pcre -qt-zlib \
     -skip gamepad -skip location -skip qt3d -skip qtactiveqt -skip qtandroidextras \
     -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc \
