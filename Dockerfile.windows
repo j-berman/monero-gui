@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 ARG THREADS=1
 ARG QT_VERSION=v5.15.18-lts-lgpl
@@ -6,7 +6,7 @@ ENV SOURCE_DATE_EPOCH=1397818193
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive apt install -y build-essential cmake g++-mingw-w64 mingw-w64 gettext git libtool pkg-config \
-    python && \
+    python3 && \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl -O https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
@@ -21,7 +21,7 @@ RUN rustup target add x86_64-pc-windows-gnu
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
 
-RUN git clone -b fcmp++-beta-stressnet --depth 1 https://github.com/seraphis-migration/monero && \
+RUN git clone -b v0.19.0.0-beta.1.1 --depth 1 https://github.com/seraphis-migration/monero && \
     cd monero && \
     git reset --hard a6737c15afd734dc27fb043d196abd7608a3dd63 && \
     cp -a contrib/depends / && \
@@ -43,6 +43,7 @@ RUN git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qttools.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qttranslations.git -b ${QT_VERSION} --depth 1 && \
     git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1 && \
+    sed -i '/d3d12$/d' qtdeclarative/src/plugins/scenegraph/scenegraph.pro && \
     ./configure --prefix=/depends/x86_64-w64-mingw32 -xplatform win32-g++ \
     -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- \
     -I $(pwd)/qtbase/src/3rdparty/angle/include \
