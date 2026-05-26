@@ -21,9 +21,9 @@ RUN rustup target add x86_64-pc-windows-gnu
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
 
-RUN git clone -b v0.19.0.0-beta.1.1 --depth 1 https://github.com/seraphis-migration/monero && \
+RUN git clone -b v0.19.0.0-beta.2.0 --depth 1 https://github.com/seraphis-migration/monero && \
     cd monero && \
-    git reset --hard a6737c15afd734dc27fb043d196abd7608a3dd63 && \
+    git reset --hard 8ed2f782517db08bd6069517b7dcc2959b816e69 && \
     cp -a contrib/depends / && \
     cd .. && \
     rm -rf monero
