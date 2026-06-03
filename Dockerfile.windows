@@ -21,7 +21,7 @@ RUN rustup target add x86_64-pc-windows-gnu
 RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
     update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
 
-RUN git clone -b fcmp++-beta-stressnet-windows-376 --depth 1 https://github.com/seraphis-migration/monero && \
+RUN git clone -b fcmp++-beta-stressnet-windows-376 --depth 1 https://github.com/j-berman/monero && \
     cd monero && \
     git reset --hard 88c687b54a2e985c247876562f96d9bdf1b2de4f && \
     cp -a contrib/depends / && \
