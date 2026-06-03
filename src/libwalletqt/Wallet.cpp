@@ -291,6 +291,7 @@ void Wallet::initAsync(
     m_initializing = true;
     pauseRefresh();
     const auto future = m_scheduler.run([this, daemonAddress, trustedDaemon, upperTransactionLimit, isRecovering, isRecoveringFromDevice, restoreHeight, proxyAddress] {
+        qDebug() << "Calling init";
         m_initialized = init(
             daemonAddress,
             trustedDaemon,
@@ -299,6 +300,7 @@ void Wallet::initAsync(
             isRecoveringFromDevice,
             restoreHeight,
             proxyAddress);
+        qDebug() << "Called init";
         m_initializing = false;
         if (m_initialized)
         {
