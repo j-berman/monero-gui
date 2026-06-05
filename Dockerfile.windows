@@ -23,7 +23,7 @@ RUN update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-
 
 RUN git clone -b fcmp++-beta-stressnet-windows-376 --depth 1 https://github.com/j-berman/monero && \
     cd monero && \
-    git reset --hard fd6ea0b17ca2e257cf9526036c75c11a96c23723 && \
+    git reset --hard b75ff49252cd13c6b72bc7d72f74361541a16ac0 && \
     cp -a contrib/depends / && \
     cd .. && \
     rm -rf monero
