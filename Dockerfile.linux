@@ -22,17 +22,6 @@ RUN apt update && \
     ninja-build pkg-config python3 python-is-python3 wget xutils-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN git clone -b v0.18.5.4 --depth 1 https://github.com/monero-project/monero && \
-    cd monero && \
-    git reset --hard 85f036ba7019cd36f08e8a38a27c37ea7b522618 && \
-    cp -a contrib/depends / && \
-    cd .. && \
-    rm -rf monero
-
-# TODO: Remove this workaround once a better solution is found.
-RUN sed -i 's|--openssldir=$(host_prefix)/etc/openssl|--openssldir=/etc/ssl|' /depends/packages/openssl.mk && \
-    make -j"$THREADS" -C /depends HOST=x86_64-linux-gnu
-
 # Use the pinned upstream CMake binary without changing the compiler or glibc
 # baseline. The Linux x86_64 binaries require glibc 2.17 or newer.
 RUN wget -q https://github.com/Kitware/CMake/releases/download/v4.3.3/cmake-4.3.3-linux-x86_64.tar.gz && \
@@ -40,6 +29,20 @@ RUN wget -q https://github.com/Kitware/CMake/releases/download/v4.3.3/cmake-4.3.
     tar -xzf cmake-4.3.3-linux-x86_64.tar.gz -C /usr/local --strip-components=1 && \
     rm cmake-4.3.3-linux-x86_64.tar.gz && \
     cmake --version
+
+# Use the depends of the monero submodule's commit. Its hidapi is built with
+# CMake, so this has to come after the CMake install.
+RUN git init monero && \
+    cd monero && \
+    git fetch --depth 1 https://github.com/seraphis-migration/monero b13ab0cabadeb301b2ce5282b077945e9ab3a7ba && \
+    git reset --hard FETCH_HEAD && \
+    cp -a contrib/depends / && \
+    cd .. && \
+    rm -rf monero
+
+# TODO: Remove this workaround once a better solution is found.
+RUN sed -i 's|--openssldir=$(host_prefix)/etc/openssl|--openssldir=/etc/ssl|' /depends/packages/openssl.mk && \
+    make -j"$THREADS" -C /depends HOST=x86_64-linux-gnu
 
 RUN wget https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-linux-gnu/rustup-init && \
     echo "6aeece6993e902708983b209d04c0d1dbb14ebb405ddb87def578d41f920f56d rustup-init" | sha256sum -c && \
