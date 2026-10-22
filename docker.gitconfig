@@ -9,3 +9,5 @@
 	directory = /monero-gui/monero/external/trezor-common/defs/ethereum/tokens
 	directory = /monero-gui/monero/external/randomx
 	directory = /monero-gui/monero/external/supercop
+	directory = /monero-gui/monero/external/gtest
+	directory = /monero-gui/monero/external/mx25519
